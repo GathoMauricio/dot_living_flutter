@@ -39,7 +39,6 @@ class _MyAppState extends State<MyApp> {
 
   void checkModoOscuro() async {
     SharedPreferences localStorage = await SharedPreferences.getInstance();
-    print(localStorage.getBool('modo_oscuro'));
     if (!localStorage.containsKey('modo_oscuro')) {
       localStorage.setBool('modo_oscuro', modoOscuro);
     } else {

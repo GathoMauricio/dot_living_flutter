@@ -1,10 +1,16 @@
-class Residencia{
+import 'package:DotLiving/models/MediaResidencia.dart';
+import 'package:DotLiving/models/User.dart';
+
+class Residencia {
   late var id = 0;
   late var auditor_id = 0;
   late var nombre = "No disponible";
   late var telefono = "";
   late var email = "";
   late var direccion = "";
+
+  late User auditor = User();
+  List<MediaResidencia> medios = [];
 
   Residencia();
 
@@ -23,5 +29,5 @@ class Residencia{
         'telefono': telefono,
         'email': email,
         'direccion': direccion,
-      };  
+      };
 }

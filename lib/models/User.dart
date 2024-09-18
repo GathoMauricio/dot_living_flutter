@@ -1,4 +1,6 @@
-class User{
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+class User {
   late var id = 0;
   late var name = "";
   late var apaterno = "";
@@ -9,9 +11,10 @@ class User{
   late var apellido_emergencia = "";
   late var telefono_emergencia = "";
   late var identificacion_emergencia = "";
-  late var foto = "";
+  late var foto =
+      "http://${dotenv.env['SERVER_URL']}/dot_living/public/storage/foto_usuario/perfil.jpg";
   late var email = "";
-  
+
   User();
 
   User.fromJson(Map<String, dynamic> json)
@@ -28,7 +31,7 @@ class User{
         foto = json['foto'] ?? '',
         email = json['email'] ?? '';
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         'id': id,
         'name': name,
         'apaterno': apaterno,
@@ -41,5 +44,5 @@ class User{
         'identificacion_emergencia': identificacion_emergencia,
         'foto': foto,
         'email': email,
-      };    
+      };
 }

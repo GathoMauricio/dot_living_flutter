@@ -8,6 +8,7 @@ import '../../models/Habitacion.dart';
 import '../../models/Residencia.dart';
 import '../../models/User.dart';
 import '../../helpers/Mensajes.dart' as mensaje;
+import '../residencias/ResidenciaIndex.dart';
 
 class Cuenta extends StatefulWidget {
   const Cuenta({Key? key}) : super(key: key);
@@ -75,8 +76,13 @@ class _CuentaState extends State<Cuenta> {
                     FloatingActionButton.extended(
                       onPressed: () {
                         if (residencia.id > 0) {
-                          mensaje.mensajeFlash(
-                              context, "Info de ${residencia.nombre}");
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ResidenciaIndex(
+                                      residencia_id: residencia.id.toString(),
+                                    )),
+                          );
                         }
                       },
                       heroTag: 'residencia',
@@ -155,12 +161,6 @@ class _CuentaState extends State<Cuenta> {
   }
 }
 
-// class ProfileInfoItem {
-//   final String title;
-//   final int value;
-//   const ProfileInfoItem(this.title, this.value);
-// }
-
 class _TopPortion extends StatelessWidget {
   String foto = "";
   _TopPortion({required this.foto});
@@ -183,7 +183,9 @@ class _TopPortion extends StatelessWidget {
                     color: Colors.black,
                     shape: BoxShape.circle,
                     image: DecorationImage(
-                        fit: BoxFit.cover, image: NetworkImage(foto)),
+                      fit: BoxFit.cover,
+                      image: NetworkImage(foto),
+                    ),
                   ),
                 ),
               ],
