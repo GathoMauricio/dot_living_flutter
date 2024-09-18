@@ -81,12 +81,12 @@ class _ResidenciaIndexState extends State<ResidenciaIndex> {
                       FloatingActionButton.extended(
                         onPressed: () {
                           if (residencia.id > 0) {
-                            mensaje.mensajeFlash(
-                                context, "Fotos de la residencia");
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => ResidenciaMedios()),
+                                  builder: (context) => ResidenciaMedios(
+                                        residencia_id: residencia.id.toString(),
+                                      )),
                             );
                           }
                         },

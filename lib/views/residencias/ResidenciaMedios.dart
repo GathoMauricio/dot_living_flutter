@@ -1,21 +1,25 @@
+import 'package:DotLiving/models/Residencia.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+import '../../controllers/MediaResidenciaController.dart';
+import '../../controllers/ResidenciaController.dart';
+import '../../models/MediaResidencia.dart';
 
 class ResidenciaMedios extends StatefulWidget {
+  String residencia_id = "";
+  ResidenciaMedios({Key? key, required this.residencia_id}) : super(key: key);
   @override
   State<ResidenciaMedios> createState() => _ResidenciaMediosState();
 }
 
 class _ResidenciaMediosState extends State<ResidenciaMedios> {
-  final List<String> imgList = [
-    'https://images.unsplash.com/photo-1586882829491-b81178aa622e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2850&q=80',
-    'https://images.unsplash.com/photo-1586871608370-4adee64d1794?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2862&q=80',
-    'https://images.unsplash.com/photo-1586901533048-0e856dff2c0d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1650&q=80',
-    'https://images.unsplash.com/photo-1586902279476-3244d8d18285?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2850&q=80',
-    'https://images.unsplash.com/photo-1586943101559-4cdcf86a6f87?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1556&q=80',
-    'https://images.unsplash.com/photo-1586951144438-26d4e072b891?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1650&q=80',
-    'https://images.unsplash.com/photo-1586953983027-d7508a64f4bb?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1650&q=80',
-  ];
+  List<String> imgList = [];
+  Residencia residencia = Residencia();
+  ResidenciaController residenciaController = ResidenciaController();
+  MediaResidenciaController mediaController = MediaResidenciaController();
+  List<MediaResidencia> lista = [];
 
   @override
   void initState() {
@@ -24,37 +28,77 @@ class _ResidenciaMediosState extends State<ResidenciaMedios> {
   }
 
   inicializar() async {
-    //residencia = await controller.apiIndexResidencia(widget.residencia_id);
+    residencia =
+        await residenciaController.apiIndexResidencia(widget.residencia_id);
+    lista = await mediaController.apiIndexMediaResidencia(widget.residencia_id);
+    imgList = [];
+    for (MediaResidencia el in lista) {
+      imgList.add(
+          "http://${dotenv.env['SERVER_URL']}/dot_living/public/storage/residencias/${el.ruta}");
+    }
     setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Fullscreen sliding carousel demo')),
-      body: Builder(
-        builder: (context) {
-          final double height = MediaQuery.of(context).size.height;
-          return CarouselSlider(
-            options: CarouselOptions(
-              height: height,
-              viewportFraction: 1.0,
-              enlargeCenterPage: false,
-              // autoPlay: false,
+      appBar: AppBar(title: Text("Fotos: ${residencia.nombre}")),
+      body: lista.isEmpty
+          ? const Center(
+              child: Text("No hay contenido para mostrar"),
+            )
+          : Builder(
+              builder: (context) {
+                final double height = MediaQuery.of(context).size.height;
+                return CarouselSlider(
+                  options: CarouselOptions(
+                    height: height,
+                    viewportFraction: 1.0,
+                    enlargeCenterPage: true,
+                    autoPlay: true,
+                  ),
+                  items: lista
+                      .map((item) => Center(
+                              child: Stack(
+                            children: [
+                              Image.network(
+                                "http://${dotenv.env['SERVER_URL']}/dot_living/public/storage/residencias/${item.ruta}",
+                                fit: BoxFit.cover,
+                                height: height,
+                              ),
+                              Container(
+                                //width: MediaQuery.of(context).size.width - 200,
+                                padding: const EdgeInsets.all(10),
+                                color: Colors.white,
+                                child: Text(
+                                  item.descripcion,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.blue,
+                                    fontSize: 22.0,
+                                  ),
+                                ),
+                              ),
+                              // Center(
+                              //   child: Container(
+                              //     padding: const EdgeInsets.all(10),
+                              //     color: Colors.white,
+                              //     child: Text(
+                              //       item.descripcion,
+                              //       style: TextStyle(
+                              //         fontWeight: FontWeight.bold,
+                              //         color: Colors.blue,
+                              //         fontSize: 22.0,
+                              //       ),
+                              //     ),
+                              //   ),
+                              // ),
+                            ],
+                          )))
+                      .toList(),
+                );
+              },
             ),
-            items: imgList
-                .map((item) => Container(
-                      child: Center(
-                          child: Image.network(
-                        item,
-                        fit: BoxFit.cover,
-                        height: height,
-                      )),
-                    ))
-                .toList(),
-          );
-        },
-      ),
     );
   }
 }

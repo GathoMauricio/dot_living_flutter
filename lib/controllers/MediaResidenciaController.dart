@@ -4,8 +4,13 @@ import 'dart:convert' as convert;
 import 'dart:io';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class MediaResidencia {
-  Future apiIndexResidencia(String residencia_id) async {
+import '../models/MediaResidencia.dart';
+
+class MediaResidenciaController {
+  Future<List<MediaResidencia>> apiIndexMediaResidencia(
+      String residencia_id) async {
+    List<MediaResidencia> lista = [];
+
     var datos = {"residencia_id": residencia_id};
     SharedPreferences localStorage = await SharedPreferences.getInstance();
     String authToken = localStorage.getString("auth_token").toString();
@@ -18,21 +23,18 @@ class MediaResidencia {
         HttpHeaders.authorizationHeader: 'Bearer $authToken',
       },
     );
-    print(response.body);
+
     if (response.statusCode == 200) {
       try {
         var jsonResponse =
             convert.jsonDecode(response.body) as Map<String, dynamic>;
-
-        //return residencia;
+        for (var el in jsonResponse['medios']) {
+          lista.add(MediaResidencia.fromJson(el));
+        }
       } catch (e) {
         print(e);
-        //residencia.nombre = "Catch Error";
-        //return residencia;
       }
-    } else {
-      //residencia.nombre = "Server Error";
-      //return residencia;
     }
+    return lista;
   }
 }
