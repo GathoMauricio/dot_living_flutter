@@ -8,6 +8,7 @@ import '../../models/Habitacion.dart';
 import '../../models/Residencia.dart';
 import '../../models/User.dart';
 import '../../helpers/Mensajes.dart' as mensaje;
+import '../habitaciones/HabitacionIndex.dart';
 import '../residencias/ResidenciaIndex.dart';
 
 class Cuenta extends StatefulWidget {
@@ -94,8 +95,13 @@ class _CuentaState extends State<Cuenta> {
                     FloatingActionButton.extended(
                       onPressed: () {
                         if (habitacion.id > 0) {
-                          mensaje.mensajeFlash(
-                              context, "Info de ${habitacion.alias}");
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => HabitacionIndex(
+                                      habitacion_id: habitacion.id.toString(),
+                                    )),
+                          );
                         }
                       },
                       heroTag: 'habitación',

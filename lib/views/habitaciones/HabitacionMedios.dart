@@ -2,23 +2,24 @@ import 'package:DotLiving/models/Residencia.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import '../../controllers/MediaResidenciaController.dart';
-import '../../controllers/ResidenciaController.dart';
-import '../../models/MediaResidencia.dart';
+import '../../controllers/MediaHabitacionController.dart';
+import '../../controllers/HabitacionController.dart';
+import '../../models/Habitacion.dart';
+import '../../models/MediaHabitacion.dart';
 
-class ResidenciaMedios extends StatefulWidget {
-  String residencia_id = "";
-  ResidenciaMedios({Key? key, required this.residencia_id}) : super(key: key);
+class HabitacionMedios extends StatefulWidget {
+  String habitacion_id = "";
+  HabitacionMedios({Key? key, required this.habitacion_id}) : super(key: key);
   @override
-  State<ResidenciaMedios> createState() => _ResidenciaMediosState();
+  State<HabitacionMedios> createState() => _HabitacionMediosState();
 }
 
-class _ResidenciaMediosState extends State<ResidenciaMedios> {
+class _HabitacionMediosState extends State<HabitacionMedios> {
   List<String> imgList = [];
-  Residencia residencia = Residencia();
-  ResidenciaController residenciaController = ResidenciaController();
-  MediaResidenciaController mediaController = MediaResidenciaController();
-  List<MediaResidencia> lista = [];
+  Habitacion habitacion = Habitacion();
+  HabitacionController habitacionController = HabitacionController();
+  MediaHabitacionController mediaController = MediaHabitacionController();
+  List<MediaHabitacion> lista = [];
 
   @override
   void initState() {
@@ -27,13 +28,13 @@ class _ResidenciaMediosState extends State<ResidenciaMedios> {
   }
 
   inicializar() async {
-    residencia =
-        await residenciaController.apiShowResidencia(widget.residencia_id);
-    lista = await mediaController.apiIndexMediaResidencia(widget.residencia_id);
+    habitacion =
+        await habitacionController.apiShowHabitacion(widget.habitacion_id);
+    lista = await mediaController.apiIndexMediaHabitacion(widget.habitacion_id);
     imgList = [];
-    for (MediaResidencia el in lista) {
+    for (MediaHabitacion el in lista) {
       imgList.add(
-          "http://${dotenv.env['SERVER_URL']}/dot_living/public/storage/residencias/${el.ruta}");
+          "http://${dotenv.env['SERVER_URL']}/dot_living/public/storage/habitaciones/${el.ruta}");
     }
     setState(() {});
   }
@@ -41,7 +42,7 @@ class _ResidenciaMediosState extends State<ResidenciaMedios> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Fotos: ${residencia.nombre}")),
+      appBar: AppBar(title: Text("Fotos: ${habitacion.alias}")),
       body: lista.isEmpty
           ? const Center(
               child: Text("No hay contenido para mostrar"),
@@ -61,7 +62,7 @@ class _ResidenciaMediosState extends State<ResidenciaMedios> {
                               child: Stack(
                             children: [
                               Image.network(
-                                "http://${dotenv.env['SERVER_URL']}/dot_living/public/storage/residencias/${item.ruta}",
+                                "http://${dotenv.env['SERVER_URL']}/dot_living/public/storage/habitaciones/${item.ruta}",
                                 fit: BoxFit.cover,
                                 height: height,
                               ),

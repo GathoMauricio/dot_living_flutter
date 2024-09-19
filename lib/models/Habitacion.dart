@@ -1,4 +1,6 @@
-class Habitacion{
+import 'package:DotLiving/models/MediaHabitacion.dart';
+
+class Habitacion {
   late var id = 0;
   late var residencia_id = 0;
   late var residente_id = 0;
@@ -7,6 +9,7 @@ class Habitacion{
   late var renta = "";
   late var deposito = "";
   late var descripcion = "";
+  late MediaHabitacion foto_default = MediaHabitacion();
 
   Habitacion();
 
@@ -29,5 +32,5 @@ class Habitacion{
         'renta': renta,
         'deposito': deposito,
         'descripcion': descripcion,
-      }; 
+      };
 }

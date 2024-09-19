@@ -2,21 +2,22 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import '../../controllers/ResidenciaController.dart';
-import '../../models/Residencia.dart';
-import 'ResidenciaMedios.dart';
+import '../../controllers/HabitacionController.dart';
+import '../../models/Habitacion.dart';
+import 'HabitacionMedios.dart';
+//import 'habitacionMedios.dart';
 
-class ResidenciaIndex extends StatefulWidget {
-  String residencia_id = "";
-  ResidenciaIndex({Key? key, required this.residencia_id}) : super(key: key);
+class HabitacionIndex extends StatefulWidget {
+  String habitacion_id = "";
+  HabitacionIndex({Key? key, required this.habitacion_id}) : super(key: key);
 
   @override
-  State<ResidenciaIndex> createState() => _ResidenciaIndexState();
+  State<HabitacionIndex> createState() => _HabitacionIndexState();
 }
 
-class _ResidenciaIndexState extends State<ResidenciaIndex> {
-  Residencia residencia = Residencia();
-  ResidenciaController controller = ResidenciaController();
+class _HabitacionIndexState extends State<HabitacionIndex> {
+  Habitacion habitacion = Habitacion();
+  HabitacionController controller = HabitacionController();
 
   @override
   void initState() {
@@ -25,7 +26,7 @@ class _ResidenciaIndexState extends State<ResidenciaIndex> {
   }
 
   inicializar() async {
-    residencia = await controller.apiShowResidencia(widget.residencia_id);
+    habitacion = await controller.apiShowHabitacion(widget.habitacion_id);
     setState(() {});
   }
 
@@ -39,7 +40,7 @@ class _ResidenciaIndexState extends State<ResidenciaIndex> {
               flex: 1,
               child: _TopPortion(
                 foto:
-                    "http://${dotenv.env['SERVER_URL']}/dot_living/public/storage/residencias/${residencia.foto_default.ruta}",
+                    "http://${dotenv.env['SERVER_URL']}/dot_living/public/storage/habitaciones/${habitacion.foto_default.ruta}",
               )),
           Expanded(
             flex: 1,
@@ -49,7 +50,7 @@ class _ResidenciaIndexState extends State<ResidenciaIndex> {
                 children: [
                   const SizedBox(height: 15),
                   Text(
-                    residencia.nombre,
+                    habitacion.alias,
                     style: Theme.of(context)
                         .textTheme
                         .titleLarge
@@ -61,19 +62,20 @@ class _ResidenciaIndexState extends State<ResidenciaIndex> {
                     children: [
                       FloatingActionButton.extended(
                         onPressed: () {
-                          if (residencia.id > 0) {
+                          if (habitacion.id > 0) {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => ResidenciaMedios(
-                                        residencia_id: residencia.id.toString(),
+                                  builder: (context) => HabitacionMedios(
+                                        habitacion_id: habitacion.id.toString(),
                                       )),
                             );
                           }
                         },
-                        heroTag: 'residencia',
+                        heroTag: 'habitación',
                         elevation: 0,
                         label: Text("Imágenes"),
+                        backgroundColor: Colors.cyanAccent,
                         icon: const Icon(Icons.photo_album),
                       ),
                     ],
@@ -83,31 +85,32 @@ class _ResidenciaIndexState extends State<ResidenciaIndex> {
             ),
           ),
           ListTile(
-            leading: const Icon(Icons.person, color: Colors.blueAccent),
-            title: const Text("Auditor"),
-            subtitle: Text(
-                "${residencia.auditor.name} ${residencia.auditor.apaterno} ${residencia.auditor.amaterno}"),
+            leading: const Icon(Icons.price_change, color: Colors.blueAccent),
+            title: const Text("Renta"),
+            subtitle: Text(habitacion.renta),
             // trailing:
             //     const Icon(Icons.check_circle_rounded, color: Colors.green),
           ),
           ListTile(
-            leading: const Icon(Icons.phone, color: Colors.amberAccent),
-            title: const Text("Teléfono"),
-            subtitle: Text(residencia.telefono),
+            leading: const Icon(Icons.price_change, color: Colors.amberAccent),
+            title: const Text("Deposito"),
+            subtitle: Text(habitacion.deposito),
             // trailing:
             //     const Icon(Icons.check_circle_rounded, color: Colors.green),
           ),
           ListTile(
-            leading: const Icon(Icons.email, color: Colors.deepOrange),
-            title: const Text("Email"),
-            subtitle: Text(residencia.email),
+            leading: const Icon(Icons.abc, color: Colors.deepPurple),
+            title: const Text("Medidas"),
+            subtitle: Text(habitacion.medidas),
             // trailing:
             //     const Icon(Icons.check_circle_rounded, color: Colors.green),
           ),
           ListTile(
-            leading: const Icon(Icons.home, color: Colors.purpleAccent),
-            title: const Text("Dirección"),
-            subtitle: Text(residencia.direccion),
+            leading: const Icon(Icons.abc, color: Colors.deepOrange),
+            title: const Text("Descripción"),
+            subtitle: Text(habitacion.descripcion),
+            // trailing:
+            //     const Icon(Icons.check_circle_rounded, color: Colors.green),
           ),
         ],
       ),
