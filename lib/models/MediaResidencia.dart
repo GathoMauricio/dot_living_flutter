@@ -3,7 +3,7 @@ import 'Residencia.dart';
 class MediaResidencia {
   late var id = 0;
   late var residencia_id = 0;
-  late var ruta = "";
+  late var ruta = "residencia.png";
   late var descripcion = "";
   late Residencia residencia = Residencia();
 

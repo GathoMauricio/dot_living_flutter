@@ -29,7 +29,7 @@ class _ResidenciaMediosState extends State<ResidenciaMedios> {
 
   inicializar() async {
     residencia =
-        await residenciaController.apiIndexResidencia(widget.residencia_id);
+        await residenciaController.apiShowResidencia(widget.residencia_id);
     lista = await mediaController.apiIndexMediaResidencia(widget.residencia_id);
     imgList = [];
     for (MediaResidencia el in lista) {
