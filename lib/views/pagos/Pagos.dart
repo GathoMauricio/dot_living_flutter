@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../controllers/PagoController.dart';
 import '../../models/Pago.dart';
 import '../../helpers/Mensajes.dart' as mensaje;
+import 'ShowPago.dart';
 
 class Pagos extends StatefulWidget {
   const Pagos({Key? key}) : super(key: key);
@@ -27,15 +28,20 @@ class _PagosState extends State<Pagos> {
       for (Pago el in lista) {
         items.add(
           ListTile(
-            leading: el.estatus_id == 1
-                ? const Icon(Icons.warning, color: Colors.orangeAccent)
-                : const Icon(Icons.check_circle_outline, color: Colors.green),
-            title: Text(el.tipo.nombre),
+            leading: el.estatus_id == 2
+                ? const Icon(Icons.check_circle_outline, color: Colors.green)
+                : const Icon(Icons.warning, color: Colors.orangeAccent),
+            title: Text("${el.tipo.nombre} - ${el.estatus.nombre}"),
             subtitle: Text("${el.fecha} - \$${el.cantidad}"),
             trailing: const Icon(Icons.arrow_forward_ios),
             onTap: () {
-              mensaje.mensajeFlash(
-                  context, "Detalle del pago: ${el.descripcion}");
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ShowPago(
+                          pago_id: el.id.toString(),
+                        )),
+              );
             },
           ),
         );
@@ -55,24 +61,5 @@ class _PagosState extends State<Pagos> {
               })
           : const Center(child: Text("Sin registros para mostrar")),
     );
-    // return const Center(
-    //   child: Column(
-    //     children: [
-    //       SizedBox(
-    //         height: 300,
-    //       ),
-    //       Image(
-    //         image: AssetImage(
-    //           "assets/pagos.png",
-    //         ),
-    //         width: 300,
-    //       ),
-    //       Text(
-    //         "Pagos",
-    //         style: TextStyle(fontWeight: FontWeight.bold),
-    //       )
-    //     ],
-    //   ),
-    // );
   }
 }

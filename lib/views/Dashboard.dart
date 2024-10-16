@@ -59,7 +59,7 @@ final _navBarItems = [
   ),
   SalomonBottomBarItem(
     icon: const Icon(Icons.chat_rounded),
-    title: const Text("Mensajes"),
+    title: const Text("Conversaciones"),
     selectedColor: Colors.pink,
   ),
   SalomonBottomBarItem(

@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../controllers/ConversacionController.dart';
-import '../../models/Conversacion.dart';
+import '../../models/Mensaje.dart';
 import '../../helpers/Mensajes.dart' as mensaje;
-import 'ShowMensajes.dart';
 
-class Mensajes extends StatefulWidget {
-  const Mensajes({Key? key}) : super(key: key);
+class ShowMensajes extends StatefulWidget {
+  String conversacion_id = "";
+  ShowMensajes({Key? key, required this.conversacion_id}) : super(key: key);
 
   @override
-  State<Mensajes> createState() => _MensajesState();
+  State<ShowMensajes> createState() => _ShowMensajesState();
 }
 
-class _MensajesState extends State<Mensajes> {
+class _ShowMensajesState extends State<ShowMensajes> {
   ConversacionController controller = ConversacionController();
   ListView listView = ListView();
   List<ListTile> items = [];
-  List<Conversacion> lista = [];
-  String asunto = "";
+  List<Mensaje> lista = [];
+  String texto = "";
   @override
   void initState() {
     inicializar();
@@ -26,34 +26,15 @@ class _MensajesState extends State<Mensajes> {
 
   inicializar() async {
     items = [];
-    items.add(ListTile(
-      title: ElevatedButton(
-        child: const Text("Iniciar converzación"),
-        onPressed: () {
-          iniciarConversacion();
-        },
-      ),
-    ));
-    lista = await controller.apiIndexConversaciones();
+    lista = await controller.apiIndexMensajes(widget.conversacion_id);
     setState(() {
-      for (Conversacion el in lista) {
+      for (Mensaje el in lista) {
         items.add(
           ListTile(
-            leading:
-                const Icon(Icons.chat_bubble_outline, color: Colors.pinkAccent),
-            title: Text(el.asunto),
+            leading: const Icon(Icons.chat_bubble, color: Colors.pinkAccent),
+            title: Text(el.texto),
             subtitle: Text(
-                "${el.residente.name} ${el.residente.apaterno} ${el.residente.amaterno} - ${DateFormat('yyyy-MM-dd – kk:mm').format(DateTime.parse(el.created_at))} Hrs."),
-            trailing: const Icon(Icons.arrow_forward_ios),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => ShowMensajes(
-                          conversacion_id: el.id.toString(),
-                        )),
-              );
-            },
+                "${el.usuario.name} ${el.usuario.apaterno} ${el.usuario.amaterno} - ${DateFormat('yyyy-MM-dd – kk:mm').format(DateTime.parse(el.created_at))} Hrs."),
           ),
         );
       }
@@ -62,20 +43,25 @@ class _MensajesState extends State<Mensajes> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(20.0),
-      child: items.isNotEmpty
-          ? ListView.builder(
-              itemCount: items.length,
-              itemBuilder: (BuildContext context, int index) {
-                return items[index];
-              })
-          : ElevatedButton(
-              child: const Text(
-                  "Aun no hay conversaciones\nIniciar nueva conversacion"),
-              onPressed: () {
-                iniciarConversacion();
-              }),
+    return Scaffold(
+      floatingActionButton: FloatingActionButton(
+          child: const Icon(Icons.add),
+          onPressed: () {
+            iniciarConversacion();
+          }),
+      appBar: AppBar(
+        title: const Text("Conversación"),
+      ),
+      body: Container(
+        padding: const EdgeInsets.all(20.0),
+        child: items.length > 0
+            ? ListView.builder(
+                itemCount: items.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return items[index];
+                })
+            : const Center(child: Text("Sin registros para mostrar")),
+      ),
     );
   }
 
@@ -85,14 +71,14 @@ class _MensajesState extends State<Mensajes> {
         builder: (BuildContext context) {
           return AlertDialog(
             title: const Text(
-              'iniciar conversacion',
+              'Nuevo mensaje',
               style: TextStyle(
                   color: Colors.pinkAccent,
                   fontWeight: FontWeight.bold,
                   fontSize: 18.0),
             ),
             content: SizedBox(
-              height: MediaQuery.of(context).size.height / 8,
+              height: MediaQuery.of(context).size.height / 4,
               width: MediaQuery.of(context).size.width,
               child: ListView(
                 children: [
@@ -108,12 +94,12 @@ class _MensajesState extends State<Mensajes> {
                       filled: true,
                       fillColor: Color.fromARGB(240, 230, 221, 221),
                       labelStyle: TextStyle(color: Colors.pinkAccent),
-                      labelText: 'Escriba el asunto aquí:',
+                      labelText: 'Escriba su mensaje aquí:',
                     ),
                     onChanged: (value) {
-                      asunto = value;
+                      texto = value;
                     },
-                    maxLines: 1,
+                    maxLines: 4,
                   ),
                 ],
               ),
@@ -127,21 +113,20 @@ class _MensajesState extends State<Mensajes> {
               ),
               TextButton(
                 child: const Text(
-                  'Iniciar',
+                  'Enviar',
                   style: TextStyle(
                       color: Colors.pinkAccent,
                       fontWeight: FontWeight.bold,
                       fontSize: 15.0),
                 ),
                 onPressed: () async {
-                  if (asunto.isNotEmpty) {
-                    Conversacion conversacion =
-                        await controller.apiStoreConversacion(asunto);
-                    if (conversacion.id > 0) {
-                      inicializar();
-                      Navigator.of(context).pop();
-                      mensaje.mensajeFlash(context, "Registro creado");
-                    }
+                  if (texto.isNotEmpty) {
+                    Mensaje mensaje = await controller.apiStoreMensaje(
+                        widget.conversacion_id, texto);
+                    //if (mensaje.id > 0) {
+                    inicializar();
+                    Navigator.of(context).pop();
+                    //}
                   }
                 },
               ),
