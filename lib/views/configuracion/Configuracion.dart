@@ -9,6 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../helpers/Mensajes.dart';
 import '../auth/Login.dart';
+import 'Contrato.dart';
 
 class Configuracion extends StatefulWidget {
   const Configuracion({Key? key}) : super(key: key);
@@ -64,6 +65,10 @@ class _ConfiguracionState extends State<Configuracion> {
                         }
                       });
                     })),
+            const _CustomListTile(
+                on_tap: "contrato",
+                title: "Contrato",
+                icon: Icons.auto_stories),
             const _CustomListTile(
                 on_tap: "actualizar",
                 title: "Actualizar",
@@ -140,6 +145,13 @@ actualizar(context) async {
         "Actualmente se ejecuta la versión ${dotenv.env['APP_VERSION'].toString().replaceAll("_", ".")} \n¿Desea dercargarla de todas formas?.",
         hayNuevaVersion['ultima_version']);
   }
+}
+
+contrato(context) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => Contrato()),
+  );
 }
 
 cerrarSesion(context) {
@@ -219,6 +231,8 @@ class _CustomListTile extends StatelessWidget {
             break;
           case 'actualizar':
             actualizar(context);
+          case 'contrato':
+            contrato(context);
         }
       },
     );

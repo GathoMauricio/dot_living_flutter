@@ -25,6 +25,7 @@ dependencies:
   permission_handler: ^10.4.5
   salomon_bottom_bar: ^3.3.2
   shared_preferences: ^2.2.1
+  signature: ^5.5.0
   sliding_up_panel: ^2.0.0+1
   syncfusion_flutter_charts: ^21.2.4
   tag: ^2.0.0+2
