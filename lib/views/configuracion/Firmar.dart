@@ -3,10 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:signature/signature.dart';
 import '../../controllers/ConfiguracionController.dart';
 import '../../helpers/Mensajes.dart' as mensaje;
-import 'Contrato.dart';
+import '../contratos/Contratos.dart';
+import 'ContratoDetalle.dart';
 
 class Firmar extends StatefulWidget {
-  const Firmar({Key? key}) : super(key: key);
+  // ignore: non_constant_identifier_names
+  String contrato_id;
+  // ignore: non_constant_identifier_names
+  Firmar({Key? key, required this.contrato_id}) : super(key: key);
 
   @override
   State<Firmar> createState() => _FirmarState();
@@ -107,6 +111,7 @@ class _FirmarState extends State<Firmar> {
               ),
               onPressed: () async {
                 bool estado = await controller.apiGuardarFirma({
+                  'contrato_id': widget.contrato_id,
                   'firma': firma,
                 });
                 if (estado) {
@@ -118,7 +123,7 @@ class _FirmarState extends State<Firmar> {
                   Navigator.of(context).pop();
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => Contrato()),
+                    MaterialPageRoute(builder: (context) => Contratos()),
                   );
                 }
               },

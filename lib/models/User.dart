@@ -11,11 +11,13 @@ class User {
   late var apellido_emergencia = "";
   late var telefono_emergencia = "";
   late var identificacion_emergencia = "";
+  late var domicilio_emergencia = "";
   late var firma = "";
   late var fecha_contrato = "";
   late var foto =
       "http://${dotenv.env['SERVER_URL']}/dot_living/public/storage/foto_usuario/perfil.jpg";
   late var email = "";
+  late var num_ine = "";
 
   User();
 
@@ -30,10 +32,12 @@ class User {
         apellido_emergencia = json['apellido_emergencia'] ?? '',
         telefono_emergencia = json['telefono_emergencia'] ?? '',
         identificacion_emergencia = json['identificacion_emergencia'] ?? '',
+        domicilio_emergencia = json['domicilio_emergencia'] ?? '',
         foto = json['foto'] ?? '',
         email = json['email'] ?? '',
         firma = json['firma'] ?? '',
-        fecha_contrato = json['fecha_contrato'] ?? '';
+        fecha_contrato = json['fecha_contrato'] ?? '',
+        num_ine = json['num_ine'] ?? '';
 
   Map<String, dynamic> toJson() => {
         'id': id,
@@ -46,9 +50,11 @@ class User {
         'apellido_emergencia': apellido_emergencia,
         'telefono_emergencia': telefono_emergencia,
         'identificacion_emergencia': identificacion_emergencia,
+        'domicilio_emergencia': domicilio_emergencia,
         'foto': foto,
         'email': email,
         'firma': firma,
         'fecha_contrato': fecha_contrato,
+        'num_ine': num_ine,
       };
 }

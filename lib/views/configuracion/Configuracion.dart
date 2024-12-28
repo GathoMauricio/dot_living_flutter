@@ -9,7 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../helpers/Mensajes.dart';
 import '../auth/Login.dart';
-import 'Contrato.dart';
+import '../contratos/Contratos.dart';
 
 class Configuracion extends StatefulWidget {
   const Configuracion({Key? key}) : super(key: key);
@@ -150,7 +150,7 @@ actualizar(context) async {
 contrato(context) {
   Navigator.push(
     context,
-    MaterialPageRoute(builder: (context) => Contrato()),
+    MaterialPageRoute(builder: (context) => Contratos()),
   );
 }
 

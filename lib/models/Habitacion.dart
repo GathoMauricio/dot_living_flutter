@@ -9,6 +9,7 @@ class Habitacion {
   late var renta = "";
   late var deposito = "";
   late var descripcion = "";
+  late var numero = '';
   late MediaHabitacion foto_default = MediaHabitacion();
 
   Habitacion();
@@ -21,7 +22,8 @@ class Habitacion {
         medidas = json['medidas'] ?? '',
         renta = json['renta'] ?? '',
         deposito = json['deposito'] ?? '',
-        descripcion = json['descripcion'] ?? '';
+        descripcion = json['descripcion'] ?? '',
+        numero = json['numero'] ?? '';
 
   Map<String, dynamic> toJson() => {
         'id': id,
@@ -32,5 +34,6 @@ class Habitacion {
         'renta': renta,
         'deposito': deposito,
         'descripcion': descripcion,
+        'numero': numero,
       };
 }
